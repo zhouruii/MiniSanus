@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: Sanus
+  ai:
+    dashscope:
+      api-key: sk-9151772405954318b8bfa0ec7d5760e2
+      chat:
+        options:
+          model: qwen-plus
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: deepseek-r1:1.5b
+
+server:
+  port: 8123
+  servlet:
+    context-path: /api
+# springdoc-openapi
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.uchiha.sanus.controller
+# knife4j
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+
