@@ -61,20 +61,6 @@
             <version>4.4.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>dashscope-sdk-java</artifactId>
-            <version>2.19.1</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-simple</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- Spring AI Alibaba -->
         <dependency>
             <groupId>com.alibaba.cloud.ai</groupId>
             <artifactId>spring-ai-alibaba-starter</artifactId>
@@ -87,6 +73,7 @@
             <artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
             <version>1.0.0-M6</version>
         </dependency>
+
 
 
     </dependencies>
