@@ -1,13 +1,16 @@
 package com.uchiha.sanus.service;
 
 import com.uchiha.sanus.config.ChatModelFactory;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
@@ -65,15 +68,7 @@ public class SimpleScienceApp {
     }
 
     public String doChat(String modelName, String message, String chatId) {
-        ChatModel model = chatModelFactory.getModel(modelName);
-
-        // 核心区别：记忆是复用的
-        ChatMemory chatMemory = chatMemoryRepository.getOrCreate(chatId);
-
-        ChatClient chatClient = ChatClient.builder(model)
-                .defaultSystem(SYSTEM_PROMPT)
-                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
-                .build();
+        ChatClient chatClient = getChatClient(modelName, chatId);
         ChatResponse response = chatClient
                 .prompt()
                 .user(message)
@@ -84,6 +79,35 @@ public class SimpleScienceApp {
         assert response != null;
 
         return response.getResult().getOutput().getText();
+    }
+
+    @Resource
+    private VectorStore scienceAppPGVectorVectorStore;
+
+    public String chatWithRAG(String modelName, String message, String chatId) {
+        ChatClient chatClient = getChatClient(modelName, chatId);
+        ChatResponse response = chatClient.prompt()
+                .user(message)
+                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
+                .advisors(new QuestionAnswerAdvisor(scienceAppPGVectorVectorStore))
+                .call()
+                .chatResponse();
+
+        assert response != null;
+        return response.getResult().getOutput().getText();
+    }
+
+    private @NotNull ChatClient getChatClient(String modelName, String chatId) {
+        ChatModel model = chatModelFactory.getModel(modelName);
+
+        // 核心区别：记忆是复用的
+        ChatMemory chatMemory = chatMemoryRepository.getOrCreate(chatId);
+
+        return ChatClient.builder(model)
+                .defaultSystem(SYSTEM_PROMPT)
+                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
+                .build();
     }
 
 

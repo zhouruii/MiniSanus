@@ -30,3 +30,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+application-local.yaml
+
+src/main/resources/documents/
