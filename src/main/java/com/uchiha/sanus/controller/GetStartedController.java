@@ -23,4 +23,9 @@ public class GetStartedController {
         return simpleScienceApp.chatWithRAG(modelName, message, chatId);
     }
 
+    @GetMapping("/tool")
+    public String chatWithTool(String modelName, String message, String chatId) {
+        return simpleScienceApp.chatWithTools(modelName, message, chatId);
+    }
+
 }

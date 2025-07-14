@@ -13,6 +13,7 @@ import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 
@@ -109,6 +110,25 @@ public class SimpleScienceApp {
         return response.getResult().getOutput().getText();
     }
 
+    @Resource
+    private ToolCallback[] allTools;
+
+    public String chatWithTools(String modelName, String message, String chatId) {
+        ChatClient chatClient = getChatClient(modelName, chatId);
+        ChatResponse response = chatClient
+                .prompt()
+                .user(message)
+                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
+                .tools(allTools)
+                .call()
+                .chatResponse();
+        assert response != null;
+
+        return response.getResult().getOutput().getText();
+    }
+
+
     private @NotNull ChatClient getChatClient(String modelName, String chatId) {
         ChatModel model = chatModelFactory.getModel(modelName);
 
@@ -118,7 +138,6 @@ public class SimpleScienceApp {
 
         return ChatClient.builder(model)
                 .defaultSystem(SYSTEM_PROMPT)
-//                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
                 .defaultAdvisors(
                         new MessageChatMemoryAdvisor(fileBasedChatMemory),
                         new MyLoggerAdvisor())
