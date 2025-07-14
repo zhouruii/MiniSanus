@@ -2,15 +2,9 @@ spring:
   application:
     name: Sanus
   datasource:
-    postgre:
-      url: jdbc:postgresql://10.193.186.120:5432/ai_agent
-      username: uchiha
-      password: zhourui203316
-    mysql:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/sanus?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
-      username: root
-      password: zhourui203316
+    url: jdbc:postgresql://10.193.186.120:5432/ai_agent
+    username: uchiha
+    password: zhourui203316
   ai:
     dashscope:
       api-key: sk-9151772405954318b8bfa0ec7d5760e2

@@ -34,3 +34,5 @@ build/
 application-local.yaml
 
 src/main/resources/documents/
+
+tmp

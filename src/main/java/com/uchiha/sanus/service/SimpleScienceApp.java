@@ -101,12 +101,14 @@ public class SimpleScienceApp {
     private @NotNull ChatClient getChatClient(String modelName, String chatId) {
         ChatModel model = chatModelFactory.getModel(modelName);
 
-        // 核心区别：记忆是复用的
+        // 基于内存的记忆存储
         ChatMemory chatMemory = chatMemoryRepository.getOrCreate(chatId);
+        FileBasedChatMemory fileBasedChatMemory = new FileBasedChatMemory(System.getProperty("user.dir") + "/tmp/chat-memory");
 
         return ChatClient.builder(model)
                 .defaultSystem(SYSTEM_PROMPT)
-                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
+//                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
+                .defaultAdvisors(new MessageChatMemoryAdvisor(fileBasedChatMemory))
                 .build();
     }
 
