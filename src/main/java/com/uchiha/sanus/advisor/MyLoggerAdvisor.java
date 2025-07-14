@@ -10,7 +10,6 @@ import reactor.core.publisher.Flux;
  * 自定义日志 Advisor
  * 打印 info 级别日志、只输出单次用户提示词和 AI 回复的文本
  */
-//@Slf4j
 public class MyLoggerAdvisor implements CallAroundAdvisor, StreamAroundAdvisor {
 
     private static final Logger log = LoggerFactory.getLogger(MyLoggerAdvisor.class);
@@ -31,6 +30,7 @@ public class MyLoggerAdvisor implements CallAroundAdvisor, StreamAroundAdvisor {
     }
 
     private void observeAfter(AdvisedResponse advisedResponse) {
+        assert advisedResponse.response() != null;
         log.info("AI Response: {}", advisedResponse.response().getResult().getOutput().getText());
     }
 

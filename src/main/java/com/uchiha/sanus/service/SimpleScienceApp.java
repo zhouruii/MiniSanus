@@ -1,6 +1,9 @@
 package com.uchiha.sanus.service;
 
+import com.uchiha.sanus.advisor.MyLoggerAdvisor;
 import com.uchiha.sanus.config.ChatModelFactory;
+import com.uchiha.sanus.rag.QueryRewriter;
+import com.uchiha.sanus.rag.ScienceAppRagCustomAdvisorFactory;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -84,13 +87,21 @@ public class SimpleScienceApp {
     @Resource
     private VectorStore scienceAppPGVectorVectorStore;
 
+    @Resource
+    private QueryRewriter queryRewriter;
+
     public String chatWithRAG(String modelName, String message, String chatId) {
         ChatClient chatClient = getChatClient(modelName, chatId);
+        // 查询优化
+        String rewriteMessage = queryRewriter.doQueryRewrite(message);
         ChatResponse response = chatClient.prompt()
-                .user(message)
+                .user(rewriteMessage)
                 .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
                         .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
+                // 使用PostgreSQL的向量存储
                 .advisors(new QuestionAnswerAdvisor(scienceAppPGVectorVectorStore))
+                // 文档过滤
+                .advisors(ScienceAppRagCustomAdvisorFactory.createScienceAppRagCustomAdvisor(scienceAppPGVectorVectorStore, "硕士生"))
                 .call()
                 .chatResponse();
 
@@ -108,7 +119,9 @@ public class SimpleScienceApp {
         return ChatClient.builder(model)
                 .defaultSystem(SYSTEM_PROMPT)
 //                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
-                .defaultAdvisors(new MessageChatMemoryAdvisor(fileBasedChatMemory))
+                .defaultAdvisors(
+                        new MessageChatMemoryAdvisor(fileBasedChatMemory),
+                        new MyLoggerAdvisor())
                 .build();
     }
 
