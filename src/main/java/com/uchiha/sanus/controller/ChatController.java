@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/get_started")
-public class GetStartedController {
+@RequestMapping("/chat")
+public class ChatController {
 
     @Resource
     private SimpleScienceApp simpleScienceApp;
@@ -26,6 +26,11 @@ public class GetStartedController {
     @GetMapping("/tool")
     public String chatWithTool(String modelName, String message, String chatId) {
         return simpleScienceApp.chatWithTools(modelName, message, chatId);
+    }
+
+    @GetMapping("/mcp")
+    public String chatWithMCP(String modelName, String message, String chatId) {
+        return simpleScienceApp.chatWithMCP(modelName, message, chatId);
     }
 
 }

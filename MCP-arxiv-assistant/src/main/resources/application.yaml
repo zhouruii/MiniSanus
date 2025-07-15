@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: mcp-server-image-search
+  profiles:
+    active: stdio
+server:
+  port: 8127
+
+

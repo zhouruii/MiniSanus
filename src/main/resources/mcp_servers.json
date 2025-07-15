@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "MCP-arxiv-assistant": {
+      "command": "java",
+      "args": [
+        "-Dspring.ai.mcp.server.stdio=true",
+        "-Dspring.main.web-application-type=none",
+        "-Dlogging.pattern.console=",
+        "-jar",
+        "MCP-arxiv-assistant/target/MCP-arxiv-assistant-0.0.1-SNAPSHOT.jar"
+      ],
+      "env": {}
+    }
+  }
+}
+
+
+
+
+
