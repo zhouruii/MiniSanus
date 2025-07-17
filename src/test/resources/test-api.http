@@ -1,6 +1,12 @@
 ### 快速对话
 GET http://localhost:8123/api/chat/demo?modelName=qwen-turbo&message=hello&chatId=1
 
+### 快速对话（流式返回）
+GET http://localhost:8123/api/chat/sse?modelName=qwen-turbo&message=hello&chatId=1
+
+### 快速对话（流式返回）
+GET http://localhost:8123/api/chat/sse/emitter?modelName=qwen-turbo&message=hello&chatId=1
+
 ### 知识库指导对话
 GET http://localhost:8123/api/chat/rag?modelName=qwen-turbo&message=hello&chatId=1
 
@@ -12,3 +18,6 @@ GET http://localhost:8123/api/chat/mcp?modelName=qwen-turbo&message=hello&chatId
 
 ### 小型智能体对话
 GET http://localhost:8123/api/agent/mini?message=我是一名硕士生，我希望得到一些科研指导。我的研究方向是 深度学习，更细的研究方向是计算机视觉领域的去噪研究，包括但不限于图像去雨，去噪等等。我希望可以获得相关知识的讲解，你是否可以联网搜出一些学习资源。此外，我希望获取最新的资讯，即我希望通过arxiv上的论文获得研究领域的最新进展。你是否可以将我的需求汇总并生成一份科研计划，即生成一份PDF
+
+### 小型智能体对话（流式返回）
+GET http://localhost:8123/api/agent/mini/sse?message=我是一名硕士生，我希望得到一些科研指导。我的研究方向是 深度学习，更细的研究方向是计算机视觉领域的去噪研究，包括但不限于图像去雨，去噪等等。我希望可以获得相关知识的讲解，你是否可以联网搜出一些学习资源。此外，我希望获取最新的资讯，即我希望通过arxiv上的论文获得研究领域的最新进展。你是否可以将我的需求汇总并生成一份科研计划，即生成一份PDF
