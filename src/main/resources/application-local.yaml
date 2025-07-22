@@ -29,6 +29,13 @@ spring:
 #              url: http://localhost:8127
         stdio:
           servers-configuration: classpath:mcp_servers.json
+  data:
+    redis:
+      database: 5
+      host: 127.0.0.1
+      port: 6379
+      timeout: 5000
+      password: zhourui203316
 
 server:
   port: 8123

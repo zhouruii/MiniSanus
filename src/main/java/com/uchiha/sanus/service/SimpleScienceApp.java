@@ -16,6 +16,7 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -161,19 +162,23 @@ public class SimpleScienceApp {
     }
 
 
-
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     private @NotNull ChatClient getChatClient(String modelName, String chatId) {
         ChatModel model = chatModelFactory.getModel(modelName);
 
         // 基于内存的记忆存储
         ChatMemory chatMemory = chatMemoryRepository.getOrCreate(chatId);
+        // 基于文件系统的记忆存储 使用Kryo序列化实现
         FileBasedChatMemory fileBasedChatMemory = new FileBasedChatMemory(System.getProperty("user.dir") + "/tmp/chat-memory");
+        // 基于Redis的记忆存储
+        ChatMemory redisChatMemory = new RedisChatMemory(redisTemplate);
 
         return ChatClient.builder(model)
                 .defaultSystem(SYSTEM_PROMPT)
                 .defaultAdvisors(
-                        new MessageChatMemoryAdvisor(fileBasedChatMemory),
+                        new MessageChatMemoryAdvisor(redisChatMemory),
                         new MyLoggerAdvisor())
                 .build();
     }
