@@ -1,6 +1,42 @@
 spring:
   application:
-    name: ai-Sanus
+    name: MiniSanus
   profiles:
     active: local
+  datasource:
+    url: your url...
+    username: your username...
+    password: your password...
+  ai:
+    dashscope:
+      api-key: sk-...
+      chat:
+        options:
+          model: model name, such as qwen-turbo
+    ollama:
+      base-url: your url...
+      chat:
+        model: your model name, such as llama-2-13b-chat
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        dimensions: 1536
+        distance-type: COSINE_DISTANCE
+        max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+    mcp:
+      client:
+        stdio:
+          servers-configuration: classpath:mcp_servers.json
+  data:
+    redis:
+      database: 0
+      host: your host...
+      port: 0
+      timeout: 5000
+      password: your password...
+
+server:
+  port: 8123
+  servlet:
+    context-path: /api
 
