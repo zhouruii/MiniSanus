@@ -1,6 +1,6 @@
-# MiniSanus
+# Sanus
 
-🚀 **MiniSanus** — 专为科研人打造的智能 AI 科研助手
+🚀 **Sanus** — 专为科研人打造的智能 AI 科研助手
 
 ![Home](docs/assets/home.png)
 
@@ -8,7 +8,7 @@
 
 ## 📌 项目简介
 
-**MiniSanus** 是一款基于 **Spring Boot 3 + Spring AI + RAG + MCP** 架构开发的科研助手，  
+**Sanus** 是一款基于 **Spring Boot 3 + Spring AI + RAG + MCP** 架构开发的科研助手，  
 支持多轮对话、向量化知识检索、可调用工具链、Arxiv 论文搜索等功能，  
 灵活接入本地及云端大模型，助力科研人高效完成文献调研、思路整理、论文写作等核心任务。
 

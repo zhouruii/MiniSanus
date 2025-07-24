@@ -1,6 +1,6 @@
 spring:
   application:
-    name: MiniSanus
+    name: Sanus
   profiles:
     active: local
   datasource:
